@@ -20,8 +20,8 @@ function createLogger() {
     return logger;
 }
 
-function say(response, message) {
-    response.send(new TextMessage(message));
+function say(response, message, optionalKeyboard) {
+    response.send(new TextMessage(message, optionalKeyboard));
 }
 
 function checkUrlAvailability(botResponse, urlToCheck) {
@@ -64,13 +64,30 @@ if (!process.env.VIBER_PUBLIC_ACCOUNT_ACCESS_TOKEN_KEY) {
 // Creating the bot with access token, name and avatar
 const bot = new ViberBot(logger, {
     authToken: process.env.VIBER_PUBLIC_ACCOUNT_ACCESS_TOKEN_KEY, // Learn how to get your access token at developers.viber.com
-    name: "Is It Up",
-    avatar: "https://raw.githubusercontent.com/devrelv/drop/master/151-icon.png" // Just a placeholder avatar to display the user
+    name: "Matroluxetest",
+    avatar: "https://dl-media.viber.com/1/share/2/long/vibes/icon/image/0x0/68c5/dcccb7645955107f5075907062fce9132c9c1238724ad5aa6e2e22da0fe068c5.jpg" // Just a placeholder avatar to display the user
 });
 
 // The user will get those messages on first registration
-bot.onSubscribe(response => {
-    say(response, `Hi there ${response.userProfile.name}. I am ${bot.name}! Feel free to ask me if a web site is down for everyone or just you. Just send me a name of a website and I'll do the rest!`);
+bot.onConversationStarted(response => {
+    say(response, `Hi there ${response.userProfile.name}. I am ${bot.name}! Feel free to ask me if a web site is down for everyone or just you. Just send me a name of a website and I'll do the rest!`, {
+        "Type":"keyboard",
+        "DefaultHeight":true,
+        "Buttons":[
+           {
+              "ActionType":"reply",
+              "ActionBody":"reply to me",
+              "Text":"Головна",
+              "TextSize":"regular"
+           },
+           {
+              "ActionType":"reply",
+              "ActionBody":"reply to me",
+              "Text":"Назад",
+              "TextSize":"regular"
+           }
+        ]
+     });
 });
 
 bot.on(BotEvents.MESSAGE_RECEIVED, (message, response) => {
